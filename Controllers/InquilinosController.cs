@@ -1,156 +1,73 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using Inmobiliaria.Data;
 using Inmobiliaria.Models;
 
 namespace Inmobiliaria.Controllers
 {
     public class InquilinosController : Controller
     {
-        private readonly InmobiliariaContext _context;
+        private readonly RepositorioInquilino repo;
 
-        public InquilinosController(InmobiliariaContext context)
+        public InquilinosController(IConfiguration config)
         {
-            _context = context;
+            var cs = config.GetConnectionString("DefaultConnection");
+            repo = new RepositorioInquilino(cs!);
         }
 
-        // GET: Inquilinos
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            return View(await _context.Inquilinos.ToListAsync());
+            var lista = repo.ObtenerTodos();
+            return View(lista);
         }
 
-        // GET: Inquilinos/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var inquilino = await _context.Inquilinos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (inquilino == null)
-            {
-                return NotFound();
-            }
-
-            return View(inquilino);
+            var i = repo.ObtenerPorId(id);
+            if (i == null) return NotFound();
+            return View(i);
         }
 
-        // GET: Inquilinos/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult Create() => View();
 
-        // POST: Inquilinos/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DNI,NombreCompleto,Telefono,Email")] Inquilino inquilino)
+        public IActionResult Create(Inquilino i)
         {
-            if (ModelState.IsValid)
-            {
-                _context.Add(inquilino);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(inquilino);
-        }
-
-        // GET: Inquilinos/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var inquilino = await _context.Inquilinos.FindAsync(id);
-            if (inquilino == null)
-            {
-                return NotFound();
-            }
-            return View(inquilino);
-        }
-
-        // POST: Inquilinos/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DNI,NombreCompleto,Telefono,Email")] Inquilino inquilino)
-        {
-            if (id != inquilino.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(inquilino);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!InquilinoExists(inquilino.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(inquilino);
-        }
-
-        // GET: Inquilinos/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var inquilino = await _context.Inquilinos
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (inquilino == null)
-            {
-                return NotFound();
-            }
-
-            return View(inquilino);
-        }
-
-        // POST: Inquilinos/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var inquilino = await _context.Inquilinos.FindAsync(id);
-            if (inquilino != null)
-            {
-                _context.Inquilinos.Remove(inquilino);
-            }
-
-            await _context.SaveChangesAsync();
+            if (!ModelState.IsValid) return View(i);
+            repo.Alta(i);
             return RedirectToAction(nameof(Index));
         }
 
-        private bool InquilinoExists(int id)
+        public IActionResult Edit(int id)
         {
-            return _context.Inquilinos.Any(e => e.Id == id);
+            var i = repo.ObtenerPorId(id);
+            if (i == null) return NotFound();
+            return View(i);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(int id, Inquilino i)
+        {
+            if (id != i.Id) return BadRequest();
+            if (!ModelState.IsValid) return View(i);
+            repo.Modificacion(i);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public IActionResult Delete(int id)
+        {
+            var i = repo.ObtenerPorId(id);
+            if (i == null) return NotFound();
+            return View(i);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            repo.Baja(id);
+            return RedirectToAction(nameof(Index));
         }
     }
 }

@@ -1,0 +1,16 @@
+CREATE TABLE IF NOT EXISTS Propietarios (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    DNI TEXT NOT NULL,
+    Apellido TEXT NOT NULL,
+    Nombre TEXT NOT NULL,
+    Telefono TEXT NULL,
+    Email TEXT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Inquilinos (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    DNI TEXT NOT NULL,
+    NombreCompleto TEXT NOT NULL,
+    Telefono TEXT NULL,
+    Email TEXT NULL
+);
