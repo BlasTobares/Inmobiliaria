@@ -1,0 +1,44 @@
+@model Inmobiliaria.Models.Inmueble
+@{
+    ViewData["Title"] = "Nuevo Inmueble";
+    var propietarios = ViewBag.Propietarios as List<Inmobiliaria.Models.Propietario>;
+}
+<h1>Nuevo Inmueble</h1>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label class="form-label">Dirección</label>
+        <input asp-for="Direccion" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Uso</label>
+        <input asp-for="Uso" class="form-control" placeholder="Residencial/Comercial" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Tipo</label>
+        <input asp-for="Tipo" class="form-control" placeholder="Casa/Departamento/Local" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Ambientes</label>
+        <input asp-for="Ambientes" type="number" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Superficie (m²)</label>
+        <input asp-for="Superficie" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Precio Base</label>
+        <input asp-for="PrecioBase" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Propietario</label>
+        <select asp-for="IdPropietario" class="form-select">
+            @foreach (var p in propietarios)
+            {
+                <option value="@p.Id">@($"{p.Apellido}, {p.Nombre}")</option>
+            }
+        </select>
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>
