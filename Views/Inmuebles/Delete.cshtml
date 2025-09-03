@@ -1,0 +1,26 @@
+@model Inmobiliaria.Models.Inmueble
+@{
+    ViewData["Title"] = "Eliminar Inmueble";
+}
+<h1>Eliminar Inmueble</h1>
+
+<h3>¿Seguro que quieres eliminar este inmueble?</h3>
+
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Dirección</dt>
+        <dd class="col-sm-10">@Model.Direccion</dd>
+        <dt class="col-sm-2">Tipo</dt>
+        <dd class="col-sm-10">@Model.Tipo</dd>
+        <dt class="col-sm-2">Precio</dt>
+        <dd class="col-sm-10">@Model.PrecioBase</dd>
+        <dt class="col-sm-2">Propietario</dt>
+        <dd class="col-sm-10">@Model.PropietarioNombre</dd>
+    </dl>
+</div>
+
+<form asp-action="DeleteConfirmed" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Eliminar</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

@@ -1,0 +1,55 @@
+@model Inmobiliaria.Models.Contrato
+@{
+    ViewData["Title"] = "Editar Contrato";
+    var inmuebles = ViewBag.Inmuebles as List<Inmobiliaria.Models.Inmueble>;
+    var inquilinos = ViewBag.Inquilinos as List<Inmobiliaria.Models.Inquilino>;
+}
+<h1>Editar Contrato</h1>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <div class="mb-3">
+        <label class="form-label">Inmueble</label>
+        <select asp-for="IdInmueble" class="form-select">
+            @foreach (var i in inmuebles)
+            {
+                <option value="@i.Id" selected="@(i.Id == Model.IdInmueble)">
+                    @i.Direccion
+                </option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Inquilino</label>
+        <select asp-for="IdInquilino" class="form-select">
+            @foreach (var q in inquilinos)
+            {
+                <option value="@q.Id" selected="@(q.Id == Model.IdInquilino)">
+                    @q.NombreCompleto
+                </option>
+            }
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Fecha Inicio</label>
+        <input asp-for="FechaInicio" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Fecha Fin</label>
+        <input asp-for="FechaFin" type="date" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Monto Mensual</label>
+        <input asp-for="MontoMensual" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Depósito</label>
+        <input asp-for="Deposito" type="number" step="0.01" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Estado</label>
+        <input asp-for="Estado" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>
