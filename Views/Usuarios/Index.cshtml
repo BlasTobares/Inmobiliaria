@@ -1,0 +1,45 @@
+@model IEnumerable<Inmobiliaria.Models.Usuario>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<h1>Usuarios</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">➕ Crear nuevo</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Rol</th>
+            <th>Avatar</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var u in Model) {
+        <tr>
+            <td>@u.Email</td>
+            <td>@u.Nombre</td>
+            <td>@u.Apellido</td>
+            <td>@u.Rol</td>
+            <td>
+                @if (!string.IsNullOrEmpty(u.AvatarPath))
+                {
+                    <img src="@Url.Content(u.AvatarPath)" alt="avatar" style="width:40px;height:40px;border-radius:50%" />
+                }
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@u.Id">Detalles</a> |
+                <a asp-action="Edit" asp-route-id="@u.Id">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@u.Id">Eliminar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

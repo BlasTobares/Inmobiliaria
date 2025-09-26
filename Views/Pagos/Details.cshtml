@@ -1,0 +1,40 @@
+@model Inmobiliaria.Models.Pago
+
+@{
+    ViewData["Title"] = "Detalle de Pago";
+}
+
+<h2>Detalle de Pago</h2>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Contrato</dt>
+            <dd class="col-sm-9">@Model.ContratoInfo</dd>
+
+            <dt class="col-sm-3">Nro Pago</dt>
+            <dd class="col-sm-9">@Model.NroPago</dd>
+
+            <dt class="col-sm-3">Fecha</dt>
+            <dd class="col-sm-9">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Importe</dt>
+            <dd class="col-sm-9">$ @Model.Importe.ToString("N2")</dd>
+
+            <dt class="col-sm-3">Detalle</dt>
+            <dd class="col-sm-9">@Model.Detalle</dd>
+
+            <dt class="col-sm-3">Estado</dt>
+            <dd class="col-sm-9">@Model.Estado</dd>
+
+            <dt class="col-sm-3">Creado por</dt>
+            <dd class="col-sm-9">@ViewBag.CreatedByName @if (Model.CreatedAt.HasValue) { <span class="text-muted">(@Model.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm"))</span> }</dd>
+
+            <dt class="col-sm-3">Anulado por</dt>
+            <dd class="col-sm-9">@ViewBag.AnnulledByName @if (Model.AnnulledAt.HasValue) { <span class="text-muted">(@Model.AnnulledAt.Value.ToString("dd/MM/yyyy HH:mm"))</span> }</dd>
+        </dl>
+
+        <a asp-action="Index" class="btn btn-secondary">Volver</a>
+    </div>
+</div>
+

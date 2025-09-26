@@ -1,24 +1,22 @@
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using Inmobiliaria.Data;
 using Inmobiliaria.Models;
 
 namespace Inmobiliaria.Controllers
 {
+    [Authorize]
     public class InquilinosController : Controller
     {
         private readonly RepositorioInquilino repo;
 
         public InquilinosController(IConfiguration config)
         {
-            var cs = config.GetConnectionString("DefaultConnection");
-            repo = new RepositorioInquilino(cs!);
+            repo = new RepositorioInquilino(config.GetConnectionString("DefaultConnection")!);
         }
 
-        public IActionResult Index()
-        {
-            var lista = repo.ObtenerTodos();
-            return View(lista);
-        }
+        public IActionResult Index() => View(repo.ObtenerTodos());
 
         public IActionResult Details(int id)
         {
@@ -29,8 +27,7 @@ namespace Inmobiliaria.Controllers
 
         public IActionResult Create() => View();
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ValidateAntiForgeryToken]
         public IActionResult Create(Inquilino i)
         {
             if (!ModelState.IsValid) return View(i);
@@ -45,16 +42,15 @@ namespace Inmobiliaria.Controllers
             return View(i);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, Inquilino i)
+        [HttpPost, ValidateAntiForgeryToken]
+        public IActionResult Edit(Inquilino i)
         {
-            if (id != i.Id) return BadRequest();
             if (!ModelState.IsValid) return View(i);
             repo.Modificacion(i);
             return RedirectToAction(nameof(Index));
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Delete(int id)
         {
             var i = repo.ObtenerPorId(id);
@@ -62,8 +58,7 @@ namespace Inmobiliaria.Controllers
             return View(i);
         }
 
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
+        [HttpPost, ActionName("Delete"), ValidateAntiForgeryToken, Authorize(Roles = "Admin")]
         public IActionResult DeleteConfirmed(int id)
         {
             repo.Baja(id);

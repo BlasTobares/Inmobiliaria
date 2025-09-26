@@ -3,36 +3,45 @@
     ViewData["Title"] = "Contratos";
 }
 <h1>Contratos</h1>
-<p><a class="btn btn-primary" asp-action="Create">Nuevo Contrato</a></p>
 
-<table class="table">
+<p>
+    <a asp-action="Create" class="btn btn-primary">➕ Nuevo Contrato</a>
+</p>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Inmueble</th>
             <th>Inquilino</th>
             <th>Fecha Inicio</th>
             <th>Fecha Fin</th>
-            <th>Monto</th>
+            <th>Monto Mensual</th>
             <th>Estado</th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var c in Model)
-{
-    <tr>
-        <td>@c.InmuebleDireccion</td>
-        <td>@c.InquilinoNombre</td>
-        <td>@c.FechaInicio</td>
-        <td>@c.FechaFin</td>
-        <td>@c.MontoMensual</td>
-        <td>@c.Estado</td>
-        <td>
-            <a asp-action="Details" asp-route-id="@c.Id">Detalles</a> |
-            <a asp-action="Edit" asp-route-id="@c.Id">Editar</a> |
-            <a asp-action="Delete" asp-route-id="@c.Id">Borrar</a>
-        </td>
-    </tr>
-}
+    @foreach (var c in Model)
+    {
+        <tr>
+            <td>@c.InmuebleDireccion</td>
+            <td>@c.InquilinoNombre</td>
+            <td>@c.FechaInicio.ToString("dd/MM/yyyy")</td>
+            <td>@c.FechaFin.ToString("dd/MM/yyyy")</td>
+            <td>@c.MontoMensual.ToString("C")</td>
+            <td>@c.Estado</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@c.Id">Detalles</a> |
+                <a asp-action="Edit" asp-route-id="@c.Id">Editar</a> |
+                <a asp-action="Delete" asp-route-id="@c.Id">Eliminar</a>
+
+                <a asp-controller="Pagos" asp-action="Create" asp-route-contratoId="@c.Id" 
+                class="btn btn-success btn-sm">
+                💰 Registrar Pago
+                </a>
+            </td>
+        </tr>
+    }
     </tbody>
 </table>
+

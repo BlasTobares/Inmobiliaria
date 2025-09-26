@@ -1,46 +1,61 @@
 @model Inmobiliaria.Models.Contrato
 @{
     ViewData["Title"] = "Nuevo Contrato";
-    var inmuebles = ViewBag.Inmuebles as List<Inmobiliaria.Models.Inmueble>;
-    var inquilinos = ViewBag.Inquilinos as List<Inmobiliaria.Models.Inquilino>;
 }
+
 <h1>Nuevo Contrato</h1>
 
+<!-- 🔴 Esto muestra los errores que pusiste con ModelState.AddModelError -->
+<div asp-validation-summary="All" class="alert alert-danger"></div>
+
 <form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label class="form-label">Inmueble</label>
-        <select asp-for="IdInmueble" class="form-select">
-            @foreach (var i in inmuebles)
-            {
-                <option value="@i.Id">@i.Direccion</option>
-            }
+    <div class="form-group">
+        <label>Inmueble</label>
+        <select asp-for="IdInmueble" class="form-control"
+                asp-items="@(new SelectList(ViewBag.Inmuebles, "Id", "Direccion"))">
         </select>
+        <span asp-validation-for="IdInmueble" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Inquilino</label>
-        <select asp-for="IdInquilino" class="form-select">
-            @foreach (var q in inquilinos)
-            {
-                <option value="@q.Id">@q.NombreCompleto</option>
-            }
+
+    <div class="form-group">
+        <label>Inquilino</label>
+        <select asp-for="IdInquilino" class="form-control"
+                asp-items="@(new SelectList(ViewBag.Inquilinos, "Id", "NombreCompleto"))">
         </select>
+        <span asp-validation-for="IdInquilino" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Fecha Inicio</label>
+
+    <div class="form-group">
+        <label>Fecha Inicio</label>
         <input asp-for="FechaInicio" type="date" class="form-control" />
+        <span asp-validation-for="FechaInicio" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Fecha Fin</label>
+
+    <div class="form-group">
+        <label>Fecha Fin</label>
         <input asp-for="FechaFin" type="date" class="form-control" />
+        <span asp-validation-for="FechaFin" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Monto Mensual</label>
-        <input asp-for="MontoMensual" type="number" step="0.01" class="form-control" />
+
+    <div class="form-group">
+        <label>Monto Mensual</label>
+        <input asp-for="MontoMensual" class="form-control" />
+        <span asp-validation-for="MontoMensual" class="text-danger"></span>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Depósito</label>
-        <input asp-for="Deposito" type="number" step="0.01" class="form-control" />
+
+    <div class="form-group">
+        <label>Depósito</label>
+        <input asp-for="Deposito" class="form-control" />
+        <span asp-validation-for="Deposito" class="text-danger"></span>
     </div>
+
+    <div class="form-group">
+        <label>Estado</label>
+        <input asp-for="Estado" class="form-control" />
+        <span asp-validation-for="Estado" class="text-danger"></span>
+    </div>
+
     <button type="submit" class="btn btn-success">Guardar</button>
     <a asp-action="Index" class="btn btn-secondary">Volver</a>
 </form>
+

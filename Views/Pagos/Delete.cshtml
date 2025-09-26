@@ -1,0 +1,32 @@
+@model Inmobiliaria.Models.Pago
+
+@{
+    ViewData["Title"] = "Anular Pago";
+}
+
+<h2>Anular Pago</h2>
+
+<h4>¿Estás seguro de que deseas anular este pago?</h4>
+<hr />
+
+<dl class="row">
+    <dt class="col-sm-2">Contrato</dt>
+    <dd class="col-sm-10">@Model.ContratoInfo</dd>
+
+    <dt class="col-sm-2">Número de Pago</dt>
+    <dd class="col-sm-10">@Model.NroPago</dd>
+
+    <dt class="col-sm-2">Fecha</dt>
+    <dd class="col-sm-10">@Model.Fecha.ToString("dd/MM/yyyy")</dd>
+
+    <dt class="col-sm-2">Importe</dt>
+    <dd class="col-sm-10">$ @Model.Importe.ToString("N2")</dd>
+</dl>
+
+<form asp-action="Delete">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group mt-3">
+        <input type="submit" value="Anular" class="btn btn-danger" />
+        <a asp-action="Index" asp-route-contratoId="@Model.IdContrato" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>

@@ -12,6 +12,8 @@ namespace Inmobiliaria.Models
         public double? Longitud { get; set; }
         public double PrecioBase { get; set; }
         public int IdPropietario { get; set; }
+        public bool Estado { get; set; }
+
 
         // Para vistas (mostrar nombres sin otra consulta)
         public string? PropietarioNombre { get; set; }

@@ -1,0 +1,58 @@
+@model IEnumerable<Inmobiliaria.Models.Inmueble>
+
+@{
+    ViewData["Title"] = "Inmuebles disponibles por fechas";
+    var fechaInicio = ViewBag.FechaInicio as DateTime?;
+    var fechaFin = ViewBag.FechaFin as DateTime?;
+}
+
+<h1>Buscar Inmuebles Disponibles por Fechas</h1>
+
+<form asp-action="DisponiblesPorFecha" method="post" class="row g-3 mb-4">
+    <div class="col-md-4">
+        <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+        <input type="date" id="fechaInicio" name="fechaInicio" class="form-control"
+               value="@(fechaInicio?.ToString("yyyy-MM-dd") ?? DateTime.Today.ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="col-md-4">
+        <label for="fechaFin" class="form-label">Fecha Fin</label>
+        <input type="date" id="fechaFin" name="fechaFin" class="form-control"
+               value="@(fechaFin?.ToString("yyyy-MM-dd") ?? DateTime.Today.AddMonths(1).ToString("yyyy-MM-dd"))" />
+    </div>
+    <div class="col-md-4 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Buscar</button>
+    </div>
+</form>
+
+@if (Model != null && Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Dirección</th>
+                <th>Uso</th>
+                <th>Tipo</th>
+                <th>Ambientes</th>
+                <th>Precio</th>
+                <th>Propietario</th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var x in Model)
+        {
+            <tr>
+                <td>@x.Direccion</td>
+                <td>@x.Uso</td>
+                <td>@x.Tipo</td>
+                <td>@x.Ambientes</td>
+                <td>@x.PrecioBase</td>
+                <td>@x.PropietarioNombre</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}
+else
+{
+    <p class="text-muted">No se encontraron inmuebles disponibles en ese rango de fechas.</p>
+}

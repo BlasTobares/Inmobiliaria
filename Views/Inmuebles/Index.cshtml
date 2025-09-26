@@ -3,9 +3,33 @@
     ViewData["Title"] = "Inmuebles";
 }
 <h1>Inmuebles</h1>
-<p><a class="btn btn-primary" asp-action="Create">Nuevo Inmueble</a></p>
 
-<table class="table">
+@{
+    var error = TempData["Error"] as string;
+    var success = TempData["Success"] as string;
+}
+
+@if (!string.IsNullOrEmpty(error))
+{
+    <div class="alert alert-danger" role="alert">
+        @error
+    </div>
+}
+@if (!string.IsNullOrEmpty(success))
+{
+    <div class="alert alert-success" role="alert">
+        @success
+    </div>
+}
+
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Nuevo Inmueble</a>
+    <a class="btn btn-success" asp-action="Disponibles">Ver Disponibles</a>
+    <a class="btn btn-info" asp-action="DisponiblesPorFecha">Ver Disponibles por Fechas</a>
+</p>
+
+<table class="table table-striped">
     <thead>
         <tr>
             <th>Dirección</th>
@@ -14,6 +38,7 @@
             <th>Amb.</th>
             <th>Precio</th>
             <th>Propietario</th>
+            <th>Estado</th>
             <th></th>
         </tr>
     </thead>
@@ -28,6 +53,16 @@
         <td>@x.PrecioBase</td>
         <td>@x.PropietarioNombre</td>
         <td>
+            @if (x.Estado)
+            {
+                <span class="badge bg-success">Disponible</span>
+            }
+            else
+            {
+                <span class="badge bg-danger">No disponible</span>
+            }
+        </td>
+        <td>
             <a asp-action="Details" asp-route-id="@x.Id">Detalles</a> |
             <a asp-action="Edit" asp-route-id="@x.Id">Editar</a> |
             <a asp-action="Delete" asp-route-id="@x.Id">Borrar</a>
@@ -36,3 +71,4 @@
 }
     </tbody>
 </table>
+

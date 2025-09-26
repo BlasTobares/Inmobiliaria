@@ -1,0 +1,75 @@
+@model IEnumerable<Inmobiliaria.Models.Pago>
+
+@{
+    ViewData["Title"] = "Pagos";
+}
+
+<h2>Pagos</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Contrato</th>
+            <th>Nro Pago</th>
+            <th>Fecha</th>
+            <th>Importe</th>
+            <th>Detalle</th>
+            <th>Estado</th>
+            <th>Creado</th>
+            <th>Anulado Por</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr class="@(item.Estado == "Anulado" ? "table-danger" : "")">
+            <td>@item.ContratoInfo</td>
+            <td>@item.NroPago</td>
+            <td>@item.Fecha.ToString("dd/MM/yyyy")</td>
+            <td>$ @item.Importe.ToString("N2")</td>
+            <td>@item.Detalle</td>
+            <td>
+                @if (item.Estado == "Activo")
+                {
+                    <span class="badge bg-success">Activo</span>
+                }
+                else if (item.Estado == "Anulado")
+                {
+                    <span class="badge bg-danger">Anulado</span>
+                }
+            </td>
+            <td>
+                @if (item.CreatedAt.HasValue)
+                {
+                    <span>@item.CreatedAt.Value.ToString("dd/MM/yyyy HH:mm")</span>
+                }
+            </td>
+            <td>
+                @if (item.Estado == "Anulado" && item.AnnulledByUserId.HasValue)
+                {
+                    <span class="text-muted">#@item.AnnulledByUserId</span>
+                    @if (item.AnnulledAt.HasValue)
+                    {
+                        <br /><small>@item.AnnulledAt.Value.ToString("dd/MM/yyyy HH:mm")</small>
+                    }
+                }
+            </td>
+            <td>
+                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info">Detalles</a>
+
+                @* Anular (POST) - sólo Admin *@
+                @if (item.Estado == "Activo" && User.IsInRole("Admin"))
+                {
+                    <form asp-action="Anular" method="post" asp-route-id="@item.Id" class="d-inline" onsubmit="return confirm('¿Confirma anular este pago?');">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-danger">Anular</button>
+                    </form>
+                }
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+
